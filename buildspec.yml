@@ -1,0 +1,25 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.8
+    commands:
+      - pip install -r requirements.txt
+  pre_build:
+    commands:
+      - echo "Pre-build phase"
+      - python manage.py collectstatic --noinput
+  build:
+    commands:
+      - echo "Build phase"
+      - python manage.py migrate
+      - python manage.py test
+  post_build:
+    commands:
+      - echo "Post-build phase"
+      - echo "Build completed on `date`"
+artifacts:
+  files:
+    - '**/*'
+  discard-paths: yes
