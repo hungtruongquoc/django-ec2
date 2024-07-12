@@ -2,7 +2,7 @@
 import random
 from django.core.management.base import BaseCommand
 
-from backend.models import DayPoint
+from backend.models import DayPoint, RoomUtilization
 from backend.models import Hotel
 from backend.models import Room
 from datetime import date, timedelta
@@ -16,6 +16,7 @@ class Command(BaseCommand):
         self._seed_hotels()
         self._seed_rooms()
         self._seed_day_points()
+        self._seed_room_utilization()
         self.stdout.write('Data seeded successfully!')
 
     def _seed_hotels(self):
@@ -60,4 +61,32 @@ class Command(BaseCommand):
                 self.stdout.write(f'Created DayPoint: {day_point.date}')
             else:
                 self.stdout.write(f'DayPoint already exists: {day_point.date}')
+            current_date += delta
+
+    def _seed_room_utilization(self):
+        rooms = Room.objects.all()
+        start_date = date(2024, 1, 1)
+        end_date = date(2024, 2, 29)
+        delta = timedelta(days=1)
+
+        current_date = start_date
+        while current_date <= end_date:
+            for room in rooms:
+                day_point = DayPoint.objects.get(date=current_date)
+                utilization_data = {
+                    'room': room,
+                    'day': day_point,
+                    'utilization': random.uniform(0, 1),  # Random utilization between 0.0 and 1.0
+                }
+                utilization, created = RoomUtilization.objects.update_or_create(
+                    room=room,
+                    day=day_point,
+                    defaults={'utilization': utilization_data['utilization']}
+                )
+                if created:
+                    self.stdout.write(
+                        f'Created RoomUtilization for {room.name} on {current_date}: {utilization.utilization * 100:.2f}%')
+                else:
+                    self.stdout.write(
+                        f'Updated RoomUtilization for {room.name} on {current_date}: {utilization.utilization * 100:.2f}%')
             current_date += delta
