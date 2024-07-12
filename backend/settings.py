@@ -116,6 +116,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
+# Always set STATIC_ROOT to a filesystem path
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 if 'S3_BUCKET_NAME' in os.environ:
     AWS_S3_REGION_NAME = config('S3_BUCKET_REGION')  # e.g., us-west-2
@@ -129,7 +131,6 @@ if 'S3_BUCKET_NAME' in os.environ:
 else:
     STATIC_URL = 'static/'
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # Default primary key field type
