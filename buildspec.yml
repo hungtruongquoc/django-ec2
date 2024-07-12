@@ -15,11 +15,11 @@ phases:
       - echo "Build phase"
 #      - python manage.py migrate
 #      - python manage.py test
+      - zip -r django-ec2.zip *
   post_build:
     commands:
       - echo "Post-build phase"
       - echo "Build completed on `date`"
-      - zip -r django-ec2.zip *
 artifacts:
   files:
     - django-ec2.zip
