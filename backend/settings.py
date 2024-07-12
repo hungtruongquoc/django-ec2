@@ -117,22 +117,25 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 # Always set STATIC_ROOT to a filesystem path
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
-if 'S3_BUCKET_NAME' in os.environ:
-    print(f'Using S3 bucket: {os.environ["S3_BUCKET_NAME"]}')
-    AWS_S3_REGION_NAME = config('S3_BUCKET_REGION')  # e.g., us-west-2
-    AWS_STORAGE_BUCKET_NAME = config('S3_BUCKET_NAME')
-    # Static files
-    STATIC_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/static/'
-    # Media files
-    MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/media/'
-    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-else:
-    STATIC_URL = 'static/'
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+STATIC_URL = '/static/'
+# if 'S3_BUCKET_NAME' in os.environ:
+#     print(f'Using S3 bucket: {os.environ["S3_BUCKET_NAME"]}')
+#     AWS_S3_SIGNATURE_VERSION = 's3v4'
+#     AWS_S3_ADDRESSING_STYLE = "virtual"
+#     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+#     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+#
+#     AWS_S3_REGION_NAME = config('S3_BUCKET_REGION')  # e.g., us-west-2
+#     AWS_STORAGE_BUCKET_NAME = config('S3_BUCKET_NAME')
+#     # Static files
+#     STATIC_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/static/'
+#     # Media files
+#     MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/media/'
+# else:
+#     STATIC_URL = 'static/'
+#     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+#     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
