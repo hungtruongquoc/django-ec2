@@ -3,3 +3,4 @@ packaging==24.1
 psycopg2-binary==2.9.9
 django==5.1a1
 decouple==0.0.7
+python-decouple==3.5
