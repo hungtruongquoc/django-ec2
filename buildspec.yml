@@ -12,6 +12,9 @@ phases:
       - echo "S3_BUCKET_NAME is $S3_BUCKET_NAME"
       - echo "S3_BUCKET_REGION is $S3_BUCKET_REGION"
       - python manage.py collectstatic --noinput --verbosity 2
+      - aws s3 sync staticfiles/ s3://$S3_BUCKET_NAME/static/ --region $S3_BUCKET_REGION
+      - echo "Invalidating CloudFront cache"
+      - aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths "/*"
   build:
     commands:
       - echo "Build phase"
