@@ -129,9 +129,9 @@ if 'S3_BUCKET_NAME' in os.environ:
     AWS_S3_REGION_NAME = config('S3_BUCKET_REGION')  # e.g., us-west-2
     AWS_STORAGE_BUCKET_NAME = config('S3_BUCKET_NAME')
     # Static files
-    STATIC_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/static/'
+    STATIC_URL = f'https://dugoxwbezlvsu.cloudfront.net/static/'
     # Media files
-    MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/media/'
+    MEDIA_URL = f'https://dugoxwbezlvsu.cloudfront.net/media/'
 else:
     STATIC_URL = 'static/'
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
