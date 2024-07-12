@@ -9,6 +9,8 @@ phases:
   pre_build:
     commands:
       - echo "Pre-build phase"
+      - echo "S3_BUCKET_NAME is $S3_BUCKET_NAME"
+      - echo "S3_BUCKET_REGION is $S3_BUCKET_REGION"
       - python manage.py collectstatic --noinput
   build:
     commands:
