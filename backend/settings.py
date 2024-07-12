@@ -26,7 +26,7 @@ SECRET_KEY = config('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['django-backend-env.eba-3ye3d5ef.us-west-1.elasticbeanstalk.com', '127.0.0.1']
+ALLOWED_HOSTS = ['django-backend-env.eba-3ye3d5ef.us-west-1.elasticbeanstalk.com', '127.0.0.1', 'django-demo.htruong83.com']
 
 
 # Application definition
