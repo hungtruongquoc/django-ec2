@@ -120,6 +120,7 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 if 'S3_BUCKET_NAME' in os.environ:
+    print(f'Using S3 bucket: {os.environ["S3_BUCKET_NAME"]}')
     AWS_S3_REGION_NAME = config('S3_BUCKET_REGION')  # e.g., us-west-2
     AWS_STORAGE_BUCKET_NAME = config('S3_BUCKET_NAME')
     # Static files
