@@ -146,12 +146,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 # AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'corsheaders.middleware.CorsMiddleware',
-    ],
-    # You can add other DRF settings here as needed
-}
-
 # Allow all origins
 CORS_ALLOW_ALL_ORIGINS = True
