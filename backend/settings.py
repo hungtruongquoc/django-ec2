@@ -32,7 +32,7 @@ SECRET_KEY = config('DJANGO_SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = ['django-backend-env.eba-3ye3d5ef.us-west-1.elasticbeanstalk.com', '127.0.0.1',
-                 'django-demo.htruong83.com', 'localhost']
+                 'django-demo.htruong83.com', 'localhost', 'django-backend-prod.eba-3ye3d5ef.us-west-1.elasticbeanstalk.com']
 
 # Application definition
 
