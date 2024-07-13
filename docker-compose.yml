@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    command: gunicorn backend.wsgi:application --bind 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+# For local development, you can use the following configuration:
+#    env_file:
+#      - .env
+    environment:
+      - S3_BUCKET_NAME
+      - S3_BUCKET_REGION
+      - DJANGO_SECRET_KEY
+    volumes:
+      - .:/code
