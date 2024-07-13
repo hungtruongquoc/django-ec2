@@ -5,7 +5,7 @@ from rest_framework import status
 from backend.services import RoomUtilizationService
 
 
-class AverageUtilizationPerMonthView(APIView):
+class MonthlyUtilizationView(APIView):
 
     def get(self, request):
         try:
