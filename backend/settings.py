@@ -172,6 +172,9 @@ REST_FRAMEWORK = {
 
 # Redis cache
 # Redis cache settings
+# Cache timeout setting
+CACHE_TIMEOUT = int(os.getenv('CACHE_TIMEOUT', 60 * 15))  # Default to 15 minutes if not set
+
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',

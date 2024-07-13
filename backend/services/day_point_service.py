@@ -3,6 +3,7 @@ from django.db.models import Exists, OuterRef
 from django.db.models.functions import ExtractYear, ExtractMonth
 from backend.models import DayPoint, RoomUtilization
 from django.core.cache import cache
+from django.conf import settings
 
 
 class DayPointService:
@@ -37,6 +38,6 @@ class DayPointService:
             ]
 
             # Cache the result
-            cache.set(cache_key, month_year_list, timeout=365 * 24 * 60 * 60)  # Cache for 1 year
+            cache.set(cache_key, month_year_list, timeout=settings.CACHE_TIMEOUT)  # Cache for 1 year
 
         return month_year_list
