@@ -7,10 +7,15 @@ from decimal import Decimal
 
 class RoomUtilizationSerializer(serializers.ModelSerializer):
     utilization = serializers.DecimalField(max_digits=5, decimal_places=2)
+    day_point_str = serializers.SerializerMethodField()
 
     class Meta:
         model = RoomUtilization
         fields = '__all__'
+        extra_fields = ['day_point_str']  # Including the extra field in the fields
+
+    def get_day_point_str(self, obj):
+        return obj.day.__str__()  # or simply obj.day.date.isoformat()
 
     def validate_utilization(self, value):
         if not isinstance(value, Decimal):
