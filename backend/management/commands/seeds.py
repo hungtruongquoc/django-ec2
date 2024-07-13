@@ -82,6 +82,9 @@ class Command(BaseCommand):
                 else:
                     utilization_value = random.gammavariate(0.45, 0.65)  # Mid-range utilization
 
+                # Clamp utilization value between 0 and 1
+                utilization_value = max(0.0, min(1.0, utilization_value))
+
                 utilization_data = {
                     'room': room,
                     'day': day_point,
