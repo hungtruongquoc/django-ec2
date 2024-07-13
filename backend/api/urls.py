@@ -9,5 +9,5 @@ urlpatterns = [
          name='average-utilization-per-month'),
     path('room-utilization/max-daily-by-hotels/<str:month>/', DailyUtilizationByHotelsView.as_view(),
          name='max-daily-utilization-by-all-hotels'),
-    path('day-points/month-years/', MonthYearListView.as_view(), name='month-year-list'),
+    path('month-years/', MonthYearListView.as_view(), name='month-year-list'),
 ]
