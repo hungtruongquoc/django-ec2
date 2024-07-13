@@ -1,5 +1,6 @@
 from django.urls import path
-from backend.views import RoomUtilizationList, HotelList, MonthlyUtilizationView, DailyUtilizationByHotelsView
+from backend.views import RoomUtilizationList, HotelList, MonthlyUtilizationView, DailyUtilizationByHotelsView, \
+    MonthYearListView
 
 urlpatterns = [
     path('room-utilization/', RoomUtilizationList.as_view(), name='room-utilization-list'),
@@ -8,4 +9,5 @@ urlpatterns = [
          name='average-utilization-per-month'),
     path('room-utilization/max-daily-by-hotels/<str:month>/', DailyUtilizationByHotelsView.as_view(),
          name='max-daily-utilization-by-all-hotels'),
+    path('day-points/month-years/', MonthYearListView.as_view(), name='month-year-list'),
 ]
