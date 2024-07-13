@@ -12,6 +12,12 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 import os
 from pathlib import Path
 from decouple import config, Csv
+from rest_framework.throttling import UserRateThrottle
+
+
+class CustomThrottle(UserRateThrottle):
+    scope = 'custom'
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -150,14 +156,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Allow all origins
 CORS_ALLOW_ALL_ORIGINS = True
 
-# CSP_DEFAULT_SRC = ("'self'", "http:", "https:")
-# CSP_UPGRADE_INSECURE_REQUESTS = True
-#
-# USE_X_FORWARDED_HOST = True
-# SECURE_PROXY_SSL_HEADER = ('X-FORWARDED-PROTO', 'https')
-# SESSION_COOKIE_SECURE = True
-# CSRF_COOKIE_SECURE = True
-#
-# SECURE_CONTENT_TYPE_NOSNIFF = True
-# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-# SECURE_HSTS_PRELOAD = True
+# settings.py
+REST_FRAMEWORK = {
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+        '.CustomThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '100/day',
+        'user': '1000/day',
+        'custom': '20/minute'  # Custom rate: 5 requests per minute
+    }
+}
