@@ -1,5 +1,5 @@
 # backend/services/utilization_service.py
-from django.db.models import Avg
+from django.db.models import Avg, Max
 from backend.models import RoomUtilization
 from datetime import datetime
 
