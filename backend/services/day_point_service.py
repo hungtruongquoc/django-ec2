@@ -4,6 +4,9 @@ from django.db.models.functions import ExtractYear, ExtractMonth
 from backend.models import DayPoint, RoomUtilization
 from django.core.cache import cache
 from django.conf import settings
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class DayPointService:
@@ -39,5 +42,7 @@ class DayPointService:
 
             # Cache the result
             cache.set(cache_key, month_year_list, timeout=settings.CACHE_TIMEOUT)  # Cache for 1 year
+        else:
+            logger.debug(f"Cache hit for {cache_key}")
 
         return month_year_list

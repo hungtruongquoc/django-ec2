@@ -22,6 +22,37 @@ class CustomThrottle(UserRateThrottle):
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'debug.log'),
+        },
+    },
+    'root': {
+        'handlers': ['console', 'file'],
+        'level': 'DEBUG',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'backend.services': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
@@ -32,7 +63,8 @@ SECRET_KEY = config('DJANGO_SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = ['django-backend-env.eba-3ye3d5ef.us-west-1.elasticbeanstalk.com', '127.0.0.1',
-                 'django-demo.htruong83.com', 'localhost', 'django-backend-prod.eba-3ye3d5ef.us-west-1.elasticbeanstalk.com']
+                 'django-demo.htruong83.com', 'localhost',
+                 'django-backend-prod.eba-3ye3d5ef.us-west-1.elasticbeanstalk.com']
 
 # Application definition
 
