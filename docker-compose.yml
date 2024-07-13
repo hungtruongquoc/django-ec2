@@ -6,7 +6,6 @@ services:
     command: gunicorn backend.wsgi:application --bind 0.0.0.0:8000
     ports:
       - "80:8000"
-      - "443:8000"
 # For local development, you can use the following configuration:
 #    env_file:
 #      - .env
