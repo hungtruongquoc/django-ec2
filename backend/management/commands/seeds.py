@@ -76,11 +76,11 @@ class Command(BaseCommand):
 
                 # Different utilization patterns for different hotels
                 if room.hotel.code == 'H1':
-                    utilization_value = random.uniform(0.0, 0.5)  # Lower utilization
+                    utilization_value = random.gauss(0.0, 0.5)  # Lower utilization
                 elif room.hotel.code == 'H2':
                     utilization_value = random.uniform(0.5, 1.0)  # Higher utilization
                 else:
-                    utilization_value = random.uniform(0.25, 0.75)  # Mid-range utilization
+                    utilization_value = random.gammavariate(0.25, 0.75)  # Mid-range utilization
 
                 utilization_data = {
                     'room': room,
