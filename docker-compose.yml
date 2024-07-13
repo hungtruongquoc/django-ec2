@@ -13,5 +13,13 @@ services:
       - S3_BUCKET_NAME
       - S3_BUCKET_REGION
       - DJANGO_SECRET_KEY
+      - REDIS_URL=redis://redis:6379/1
     volumes:
       - .:/code
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"

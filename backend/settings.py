@@ -169,3 +169,28 @@ REST_FRAMEWORK = {
         'custom': '20/minute'  # Custom rate: 5 requests per minute
     }
 }
+
+# Redis cache
+# Redis cache settings
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': os.getenv('REDIS_URL', 'redis://localhost:6379/1'),
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
+
+# Cache sessions
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+SESSION_CACHE_ALIAS = 'default'
+
+# Cache fragments
+CACHES['cache_fragments'] = {
+    'BACKEND': 'django_redis.cache.RedisCache',
+    'LOCATION': os.getenv('REDIS_URL', 'redis://localhost:6379/2'),
+    'OPTIONS': {
+        'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+    }
+}
