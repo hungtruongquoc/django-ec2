@@ -53,7 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'backend.middlewares.MixContentHeaderMiddleware'
+    # 'backend.middlewares.MixContentHeaderMiddleware'
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -150,14 +150,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Allow all origins
 CORS_ALLOW_ALL_ORIGINS = True
 
-CSP_DEFAULT_SRC = ("'self'", "http:", "https:")
-CSP_UPGRADE_INSECURE_REQUESTS = True
-
-USE_X_FORWARDED_HOST = True
-SECURE_PROXY_SSL_HEADER = ('X-FORWARDED-PROTO', 'https')
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-
-SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
+# CSP_DEFAULT_SRC = ("'self'", "http:", "https:")
+# CSP_UPGRADE_INSECURE_REQUESTS = True
+#
+# USE_X_FORWARDED_HOST = True
+# SECURE_PROXY_SSL_HEADER = ('X-FORWARDED-PROTO', 'https')
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
+#
+# SECURE_CONTENT_TYPE_NOSNIFF = True
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# SECURE_HSTS_PRELOAD = True
