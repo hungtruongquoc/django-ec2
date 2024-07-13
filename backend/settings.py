@@ -148,3 +148,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Allow all origins
 CORS_ALLOW_ALL_ORIGINS = True
+
+SECURE_CONTENT_TYPE_NOSNIFF = False
+CSP_DEFAULT_SRC = ("'self'", "http:", "https:")
+CSP_UPGRADE_INSECURE_REQUESTS = True
