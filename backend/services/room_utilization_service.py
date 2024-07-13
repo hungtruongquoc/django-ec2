@@ -22,7 +22,7 @@ class RoomUtilizationService:
         return monthly_data
 
     @staticmethod
-    def get_monthly_utilization_by_hotels(month=None):
+    def get_utilization_by_day(month):
         try:
             # Parse the month parameter
             month_date = datetime.strptime(month, "%Y-%m")
@@ -32,7 +32,7 @@ class RoomUtilizationService:
                 day__date__year=month_date.year,
                 day__date__month=month_date.month
             ).values(
-                'day__date', 'room__hotel__name', 'utilization'
+                'day__date', 'room__hotel__name', 'room__name', 'utilization'
             )
 
             # Prepare the response data
@@ -42,18 +42,30 @@ class RoomUtilizationService:
                 if day_str not in daily_data:
                     daily_data[day_str] = {
                         "date": day_str,
-                        "hotels": []
+                        "hotels": {}
                     }
-                hotel_data = {
-                    "hotel": item['room__hotel__name'],
+                hotel_name = item['room__hotel__name']
+                if hotel_name not in daily_data[day_str]["hotels"]:
+                    daily_data[day_str]["hotels"][hotel_name] = {
+                        "hotel": hotel_name,
+                        "rooms": []
+                    }
+                room_data = {
+                    "room": item['room__name'],
                     "utilization": item['utilization']
                 }
-                daily_data[day_str]["hotels"].append(hotel_data)
+                daily_data[day_str]["hotels"][hotel_name]["rooms"].append(room_data)
 
-            # Convert the daily data dictionary to a list of daily data
+            # Convert nested dictionaries to lists
             result = {
                 "month": month,
-                "days": list(daily_data.values())
+                "days": [
+                    {
+                        "date": day,
+                        "hotels": list(day_data["hotels"].values())
+                    }
+                    for day, day_data in daily_data.items()
+                ]
             }
 
             return result
