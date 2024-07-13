@@ -73,10 +73,19 @@ class Command(BaseCommand):
         while current_date <= end_date:
             for room in rooms:
                 day_point = DayPoint.objects.get(date=current_date)
+
+                # Different utilization patterns for different hotels
+                if room.hotel.code == 'H1':
+                    utilization_value = random.uniform(0.0, 0.5)  # Lower utilization
+                elif room.hotel.code == 'H2':
+                    utilization_value = random.uniform(0.5, 1.0)  # Higher utilization
+                else:
+                    utilization_value = random.uniform(0.25, 0.75)  # Mid-range utilization
+
                 utilization_data = {
                     'room': room,
                     'day': day_point,
-                    'utilization': random.uniform(0, 1),  # Random utilization between 0.0 and 1.0
+                    'utilization': utilization_value,
                 }
                 utilization, created = RoomUtilization.objects.update_or_create(
                     room=room,
