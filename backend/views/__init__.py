@@ -1,4 +1,4 @@
 from .room_utilization_list import RoomUtilizationList
 from .hotel_list import HotelList
 from .monthly_utilization_view import MonthlyUtilizationView
-from .monthly_utilization_by_hotels_view import MonthlyUtilizationByHotelsView
+from .daily_utilization_by_hotels_view import DailyUtilizationByHotelsView

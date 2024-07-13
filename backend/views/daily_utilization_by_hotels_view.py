@@ -4,7 +4,7 @@ from rest_framework import status
 from backend.services import RoomUtilizationService
 
 
-class MonthlyUtilizationByHotelsView(APIView):
+class DailyUtilizationByHotelsView(APIView):
 
     def get(self, request, month=None):
         try:
