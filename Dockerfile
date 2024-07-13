@@ -14,4 +14,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 8000
 
 # Run the gunicorn server
-CMD ["gunicorn", "backend.wsgi:application", "--bind", "0.0.0.0:8000"]
+## 	•	--workers=3: Specifies the number of worker processes for handling requests. The optimal number of workers
+## is typically (2 * CPUs) + 1. Adjust this based on the number of CPU cores available.
+#	•	--threads=2: Specifies the number of threads per worker. This allows each worker to handle multiple requests
+## concurrently. Adjust this based on your application’s I/O characteristics and load.
+#	•	--timeout=120: Specifies the maximum number of seconds a worker can take to handle a request before being
+## killed and restarted. Adjust this based on your application’s performance requirements.
+CMD ["gunicorn", "backend.wsgi:application", "--bind", "0.0.0.0:8000", "--workers=3", "--threads=2", "--timeout=120"]
