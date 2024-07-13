@@ -6,6 +6,6 @@ urlpatterns = [
     path('hotels/', HotelList.as_view(), name='hotel-list'),
     path('room-utilization/average-per-month/', MonthlyUtilizationView.as_view(),
          name='average-utilization-per-month'),
-    path('room-utilization/daily-by-hotels/<str:month>/', DailyUtilizationByHotelsView.as_view(),
-         name='daily-utilization-by-all-hotels'),
+    path('room-utilization/max-daily-by-hotels/<str:month>/', DailyUtilizationByHotelsView.as_view(),
+         name='max-daily-utilization-by-all-hotels'),
 ]

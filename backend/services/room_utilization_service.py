@@ -71,3 +71,36 @@ class RoomUtilizationService:
             return result
         except ValueError:
             raise ValueError("Invalid month format. Use YYYY-MM.")
+
+    @staticmethod
+    def get_max_utilization_by_day(month):
+        try:
+            # Parse the month parameter
+            month_date = datetime.strptime(month, "%Y-%m")
+
+            # Filter RoomUtilization objects by the given month
+            utilization_data = RoomUtilization.objects.filter(
+                day__date__year=month_date.year,
+                day__date__month=month_date.month
+            ).values(
+                'day__date', 'room__hotel__name'
+            ).annotate(max_utilization=Max('utilization'))
+
+            # Prepare the response data
+            daily_data = {}
+            for item in utilization_data:
+                day_str = item['day__date'].strftime("%Y-%m-%d")
+                hotel_name = item['room__hotel__name']
+                max_utilization = item['max_utilization']
+
+                if day_str not in daily_data:
+                    daily_data[day_str] = {
+                        "day": day_str
+                    }
+                daily_data[day_str][f"{hotel_name}_max_utilization"] = max_utilization
+
+            # Convert the daily data dictionary to a list
+            result = list(daily_data.values())
+            return result
+        except ValueError:
+            raise ValueError("Invalid month format. Use YYYY-MM.")
