@@ -1,0 +1,159 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudFormation template to create a CodePipeline and CodeBuild project for a Django app connected to GitHub and deploy to Elastic Beanstalk
+
+Parameters:
+  GitHubToken:
+    Type: String
+    NoEcho: true
+    Description: 'GitHub OAuth token for accessing the repository'
+  GitHubOwner:
+    Type: String
+    Description: 'GitHub owner of the repository'
+  GitHubRepo:
+    Type: String
+    Description: 'GitHub repository name'
+  GitHubBranch:
+    Type: String
+    Default: 'main'
+    Description: 'Branch of the GitHub repository'
+  EBApplicationName:
+    Type: String
+    Description: 'Elastic Beanstalk application name'
+  EBEnvironmentName:
+    Type: String
+    Description: 'Elastic Beanstalk environment name'
+
+Resources:
+  # S3 Bucket for Pipeline Artifacts
+  PipelineArtifactBucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Sub '${AWS::StackName}-artifacts'
+
+  # IAM Role for CodeBuild
+  CodeBuildServiceRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: 'Allow'
+            Principal:
+              Service: 'codebuild.amazonaws.com'
+            Action: 'sts:AssumeRole'
+      Policies:
+        - PolicyName: 'CodeBuildPolicy'
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: 'Allow'
+                Action:
+                  - 'logs:*'
+                  - 's3:*'
+                  - 'codecommit:*'
+                Resource: '*'
+
+  # CodeBuild Project
+  CodeBuildProject:
+    Type: 'AWS::CodeBuild::Project'
+    Properties:
+      Name: 'DjangoAppBuild'
+      Source:
+        Type: 'GITHUB'
+        Location: !Sub 'https://github.com/${GitHubOwner}/${GitHubRepo}.git'
+      Artifacts:
+        Type: 'S3'
+        Location: !Ref PipelineArtifactBucket
+        Name: 'DjangoAppBuildArtifacts'
+      Environment:
+        ComputeType: 'BUILD_GENERAL1_SMALL'
+        Image: 'aws/codebuild/python:3.8'
+        Type: 'LINUX_CONTAINER'
+      ServiceRole: !GetAtt CodeBuildServiceRole.Arn
+
+  # IAM Role for CodePipeline
+  CodePipelineServiceRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: 'Allow'
+            Principal:
+              Service: 'codepipeline.amazonaws.com'
+            Action: 'sts:AssumeRole'
+      Policies:
+        - PolicyName: 'CodePipelinePolicy'
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: 'Allow'
+                Action:
+                  - 'codecommit:*'
+                  - 'codebuild:*'
+                  - 's3:*'
+                  - 'codestar-connections:*'
+                  - 'elasticbeanstalk:*'
+                Resource: '*'
+
+  # CodePipeline
+  CodePipeline:
+    Type: 'AWS::CodePipeline::Pipeline'
+    Properties:
+      RoleArn: !GetAtt CodePipelineServiceRole.Arn
+      ArtifactStore:
+        Type: 'S3'
+        Location: !Ref PipelineArtifactBucket
+      Stages:
+        - Name: 'Source'
+          Actions:
+            - Name: 'Source'
+              ActionTypeId:
+                Category: 'Source'
+                Owner: 'ThirdParty'
+                Provider: 'GitHub'
+                Version: '1'
+              OutputArtifacts:
+                - Name: 'SourceArtifact'
+              Configuration:
+                Owner: !Ref GitHubOwner
+                Repo: !Ref GitHubRepo
+                Branch: !Ref GitHubBranch
+                OAuthToken: !Ref GitHubToken
+              RunOrder: 1
+        - Name: 'Build'
+          Actions:
+            - Name: 'Build'
+              ActionTypeId:
+                Category: 'Build'
+                Owner: 'AWS'
+                Provider: 'CodeBuild'
+                Version: '1'
+              InputArtifacts:
+                - Name: 'SourceArtifact'
+              OutputArtifacts:
+                - Name: 'BuildArtifact'
+              Configuration:
+                ProjectName: !Ref CodeBuildProject
+              RunOrder: 1
+        - Name: 'Deploy'
+          Actions:
+            - Name: 'Deploy'
+              ActionTypeId:
+                Category: 'Deploy'
+                Owner: 'AWS'
+                Provider: 'ElasticBeanstalk'
+                Version: '1'
+              InputArtifacts:
+                - Name: 'BuildArtifact'
+              Configuration:
+                ApplicationName: !Ref EBApplicationName
+                EnvironmentName: !Ref EBEnvironmentName
+                S3Bucket: !Ref PipelineArtifactBucket
+                S3Key: !Sub '${CodeBuildProject}-DjangoAppBuildArtifacts.zip'
+              RunOrder: 1
+
+Outputs:
+  CodePipelineId:
+    Description: 'The ID of the CodePipeline'
+    Value: !Ref CodePipeline
